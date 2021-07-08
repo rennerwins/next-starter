@@ -1,8 +1,12 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 export default function Home() {
+  const { t } = useTranslation(['common', 'footer']);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -11,13 +15,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <main className="bg-white">
+        <h1 className={styles.title}>{t('common:title')}</h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          {t('footer:footer.title')}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
@@ -65,5 +67,14 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
+  );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'footer'])),
+      // Will be passed to the page component as props
+    },
+  };
 }
